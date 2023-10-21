@@ -58,7 +58,7 @@ class Grid {
 
     // Returns a deep copy of the current state
     get currentState() {
-        return JSON.parse(JSON.stringify(this.displayState));
+        return JSON.parse(JSON.stringify(this.state));
     }
 
     // helper method to quickly fill a 2D array
