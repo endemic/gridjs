@@ -19,8 +19,8 @@ class Grid {
         grid.style.aspectRatio = columns / rows;
 
         // fill the grid with `<div>` elements
-        for (let x = 0; x < this.columns; x += 1) {
-            for (let y = 0; y < this.rows; y += 1) {
+        for (let y = 0; y < this.rows; y += 1) {
+            for (let x = 0; x < this.columns; x += 1) {
                 // create a DOM node for each element in the backing array
                 let node = document.createElement('div');
 
