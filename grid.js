@@ -73,4 +73,9 @@ class Grid {
             y: Math.floor(Math.random() * this.rows)
         };
     }
+
+    // helper method to determine if point is in grid
+    withinBounds({ x, y }) {
+        return x >= 0 && x < this.columns && y >= 0 && y < this.rows;
+    }
 }
