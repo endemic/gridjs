@@ -38,7 +38,7 @@ class Grid {
         }
     }
 
-    update(nextState) {
+    render(nextState) {
         // enumerate through the current/new state arrays to update the changed values
         for (let x = 0; x < this.columns; x += 1) {
             for (let y = 0; y < this.rows; y += 1) {
