@@ -1,19 +1,15 @@
 class Grid {
-    // our grid contains simple integers to represent game objects;
-    // this map translates the numbers to a string, that can then be used as
-    // human-readable reference or CSS class (for display purposes)
-    cssClassMap = {};
-
     constructor(rows, columns) {
         this.rows = rows;
         this.columns = columns;
 
         // set up 2D array to use as data store for game logic & display
-        this.displayState = Array(columns).fill().map(_ => Array(rows).fill());
+        this.state = Array(columns).fill().map(_ => Array(rows).fill());
 
         // set up 2D array to store references to DOM nodes
         this.gridRef = Array(columns).fill().map(_ => Array(rows).fill());
 
+        // the base HTML page needs to have an element with `id="grid"`
         let grid = document.querySelector('#grid');
 
         // set appropriate CSS rules
@@ -22,9 +18,9 @@ class Grid {
         grid.style.gridTemplateColumns = `repeat(${columns}, auto)`;
         grid.style.aspectRatio = columns / rows;
 
-        // create the grid in our HTML page
-        for (let y = 0; y < rows; y += 1) {
-            for (let x = 0; x < columns; x += 1) {
+        // fill the grid with `<div>` elements
+        for (let y = 0; y < this.rows; y += 1) {
+            for (let x = 0; x < this.columns; x += 1) {
                 // create a DOM node for each element in the backing array
                 let node = document.createElement('div');
 
@@ -42,26 +38,27 @@ class Grid {
         }
     }
 
-    render(nextDisplayState) {
-        // enumerate through the current/new display state arrays to update the changed values
-        this.displayState.forEach((column, x) => {
-            column.forEach((row, y) => {
-                if (this.displayState[x][y] === nextDisplayState[x][y]) {
-                    return;
+    render(nextState) {
+        // enumerate through the current/new state arrays to update the changed values
+        for (let x = 0; x < this.columns; x += 1) {
+            for (let y = 0; y < this.rows; y += 1) {
+                // if old state & new state are the same, nothing needs to be updated
+                if (this.state[x][y] === nextState[x][y]) {
+                    continue;
                 }
 
-                // update the CSS class of the cell 
-                this.gridRef[x][y].classList = this.cssClassMap[nextDisplayState[x][y]];
-            });
-        });
+                // otherwise, update the CSS class of the grid cell
+                this.gridRef[x][y].classList = nextState[x][y];
+            }
+        }
 
-        // set the next state as current state
-        this.displayState = nextDisplayState;
+        // set the new current state
+        this.state = nextState;
     }
 
-    // Returns a deep copy of the current display state
-    displayStateCopy() {
-        return JSON.parse(JSON.stringify(this.displayState));
+    // Returns a deep copy of the current state
+    get currentState() {
+        return JSON.parse(JSON.stringify(this.state));
     }
 
     // helper method to quickly fill a 2D array
@@ -69,10 +66,16 @@ class Grid {
         return grid.map(row => row.fill(value));
     }
 
+    // helper method to get a random point in the grid
     randomPoint() {
         return {
             x: Math.floor(Math.random() * this.columns),
             y: Math.floor(Math.random() * this.rows)
         };
+    }
+
+    // helper method to determine if point is in grid
+    withinBounds({ x, y }) {
+        return x >= 0 && x < this.columns && y >= 0 && y < this.rows;
     }
 }
