@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Grid.js Template</title>
+</head>
+<body>
+  <div id="grid"></div>
+
+  <script type="module">
+    import { Grid } from './grid.js';
+
+    const rows = 10;
+    const columns = 10;
+
+    Grid.init(rows, columns);
+
+    document.querySelector('#grid').addEventListener('click', e => {
+      const node = e.target;
+      const { x, y } = node.dataset;
+
+      console.log(`clicked grid cell (${x}, ${y})`);
+
+      node.classList.toggle('highlight');
+    });
+  </script>
+</body>
+</html>
