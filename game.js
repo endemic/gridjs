@@ -1,16 +1,23 @@
-import { Grid } from "./grid.js";
-
 const rows = 10;
 const columns = 10;
 
 Grid.init(rows, columns);
 
-/* replace this with your own code! */
-document.querySelector("#grid").addEventListener("click", (e) => {
-  const node = e.target;
-  const { x, y } = node.dataset;
+Grid.onKeyDown(({ key }) => {
+  console.log(`pressed ${key}`);
+});
 
-  console.log(`clicked grid cell (${x}, ${y})`);
+Grid.onPointDown(({ x, y }) => {
+  console.debug(`clicked grid cell (${x}, ${y})`);
 
-  node.classList.toggle("highlight");
+  /* replace this with your own code! */
+  const nextState = Grid.currentState;
+
+  if (Grid.isEmpty(nextState[x][y])) {
+    nextState[x][y] = 'highlight';
+  } else {
+    nextState[x][y] = '';
+  }
+
+  Grid.update(nextState);
 });

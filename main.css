@@ -1,0 +1,35 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font: 1rem monospace;
+    height: 100dvh;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#grid {
+  border: 1px solid black;
+  border-bottom: 0;
+  border-right: 0;
+  width: 50%;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  user-select: none;          /* Don't select content when user interacts with grid */
+  -webkit-user-select: none;  /* Mobile Safari is dumb */
+  touch-action: manipulation; /* Disable double-tap to zoom */
+
+  div {
+    border: 1px solid black;
+    border-top: 0;
+    border-left: 0;
+  }
+
+  .highlight {
+    background-color: blueviolet;
+  }
+}

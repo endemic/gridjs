@@ -1,22 +1,22 @@
-export const Grid = {
+const Grid = {
   init(rows, columns) {
     this.rows = rows;
     this.columns = columns;
 
     // set up 2D array to use as data store for game logic & display
-    this.state = Array(columns).fill().map(_ => Array(rows).fill());
+    this.state = Array(columns).fill().map(_ => Array(rows).fill(''));
 
     // set up 2D array to store references to DOM nodes
     this.gridRef = Array(columns).fill().map(_ => Array(rows).fill());
 
     // the base HTML page needs to have an element with `id="grid"`
-    const grid = document.querySelector('#grid');
+    this.grid = document.querySelector('#grid');
 
     // set appropriate CSS rules
-    grid.style.display = 'grid';
-    grid.style.gridTemplateRows = `repeat(${rows}, auto)`;
-    grid.style.gridTemplateColumns = `repeat(${columns}, auto)`;
-    grid.style.aspectRatio = columns / rows;
+    this.grid.style.display = 'grid';
+    this.grid.style.gridTemplateRows = `repeat(${rows}, auto)`;
+    this.grid.style.gridTemplateColumns = `repeat(${columns}, auto)`;
+    this.grid.style.aspectRatio = columns / rows;
 
     // fill the grid with `<div>` elements
     for (let y = 0; y < this.rows; y += 1) {
@@ -33,7 +33,7 @@ export const Grid = {
         this.gridRef[x][y] = node;
 
         // add the node to the actual page
-        grid.appendChild(node);
+        this.grid.appendChild(node);
       }
     }
   },
@@ -61,7 +61,7 @@ export const Grid = {
     return JSON.parse(JSON.stringify(this.state));
   },
 
-  // helper method to get a random point in the grid
+  // Get a random point in the grid
   get randomPoint() {
     return {
       x: Math.floor(Math.random() * this.columns),
@@ -69,15 +69,86 @@ export const Grid = {
     };
   },
 
-  // helper method to quickly fill the grid
+  // Fill the grid with supplied value (good for initialization)
   fill(value) {
     const nextState = this.currentState;
     nextState.map(row => row.fill(value));
     this.update(nextState)
   },
 
-  // helper method to determine if point is in grid
+  // Determine if point is in grid
   withinBounds({ x, y }) {
     return x >= 0 && x < this.columns && y >= 0 && y < this.rows;
+  },
+
+  // Get (x,y) coords of a clicked/tapped square
+  getCoordinates(event) {
+    return event.target.dataset;
+  },
+
+  // Determine if a cell/value is considered "empty"
+  isEmpty(value) {
+    return value === null || value === undefined || (typeof value === 'string' && value.trim() === '');
+  },
+
+  // Syntactic sugar for interactive event handlers
+  onPointDown(callback) {
+    this.grid.addEventListener('mousedown', e => {
+      e.preventDefault();
+      callback(this.getCoordinates(e))
+    });
+
+    this.grid.addEventListener('touchstart', e => {
+      e.preventDefault();
+      callback(this.getCoordinates(e))
+    });
+  },
+
+  onPointMove(callback) {
+    this.grid.addEventListener('mousemove', e => {
+      e.preventDefault();
+      callback(this.getCoordinates(e))
+    });
+
+    this.grid.addEventListener('touchmove', e => {
+      e.preventDefault();
+      callback(this.getCoordinates(e))
+    });
+  },
+
+  onPointEnd(callback) {
+    this.grid.addEventListener('mouseup', e => {
+      e.preventDefault();
+      callback(this.getCoordinates(e))
+    });
+
+    this.grid.addEventListener('touchend', e => {
+      e.preventDefault();
+      callback(this.getCoordinates(e))
+    });
+  },
+
+  onKeyDown(callback) {
+    window.addEventListener('keydown', e => {
+      e.preventDefault();
+      callback({
+        key: e.key,
+        shift: e.shiftKey,
+        meta: e.metaKey,
+        control: e.ctrlKey
+      });
+    });
+  },
+
+  onKeyUp(callback) {
+    window.addEventListener('keyup', e => {
+      e.preventDefault();
+      callback({
+        key: e.key,
+        shift: e.shiftKey,
+        meta: e.metaKey,
+        control: e.ctrlKey
+      });
+    });
   }
 };
