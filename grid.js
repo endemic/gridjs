@@ -76,6 +76,27 @@ const Grid = {
     this.update(nextState)
   },
 
+  // get 4-way/8-way neighbors
+  getNeighbors({ x, y }, includeDiagonals = false) {
+    let cells = [
+      { x: x, y: y - 1 }, // top
+      { x: x - 1, y: y }, // left
+      { x: x + 1, y: y }, // right
+      { x: x, y: y + 1 }  // bottom
+    ];
+
+    if (includeDiagonals) {
+      cells.push(...[
+        { x: x - 1, y: y - 1 }, // upper left
+        { x: x + 1, y: y - 1 }, // upper right
+        { x: x - 1, y: y + 1 }, // lower left
+        { x: x + 1, y: y + 1 }  // lower right
+      ]);
+    }
+
+    return cells.filter(Grid.withinBounds);
+  },
+
   // Determine if point is in grid
   withinBounds({ x, y }) {
     return x >= 0 && x < this.columns && y >= 0 && y < this.rows;
