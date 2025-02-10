@@ -94,7 +94,7 @@ const Grid = {
       ]);
     }
 
-    return cells.filter(Grid.withinBounds);
+    return cells.filter(this.withinBounds.bind(this));
   },
 
   // Determine if point is in grid
