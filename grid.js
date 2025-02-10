@@ -104,7 +104,9 @@ const Grid = {
 
   // Get (x,y) coords of a clicked/tapped square
   getCoordinates(event) {
-    return event.target.dataset;
+    const [x, y] = ['x', 'y'].map(coord => parseInt(event.target.dataset[coord], 10));
+
+    return {x, y};
   },
 
   // Determine if a cell/value is considered "empty"
