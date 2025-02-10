@@ -118,36 +118,36 @@ const Grid = {
   onPointDown(callback) {
     this.grid.addEventListener('mousedown', e => {
       e.preventDefault();
-      callback(this.getCoordinates(e))
+      callback(this.getCoordinates(e));
     });
 
     this.grid.addEventListener('touchstart', e => {
       e.preventDefault();
-      callback(this.getCoordinates(e))
+      callback(this.getCoordinates(e));
     });
   },
 
   onPointMove(callback) {
     this.grid.addEventListener('mousemove', e => {
       e.preventDefault();
-      callback(this.getCoordinates(e))
+      callback(this.getCoordinates(e));
     });
 
     this.grid.addEventListener('touchmove', e => {
       e.preventDefault();
-      callback(this.getCoordinates(e))
+      callback(this.getCoordinates(e));
     });
   },
 
   onPointEnd(callback) {
     this.grid.addEventListener('mouseup', e => {
       e.preventDefault();
-      callback(this.getCoordinates(e))
+      callback(this.getCoordinates(e));
     });
 
     this.grid.addEventListener('touchend', e => {
       e.preventDefault();
-      callback(this.getCoordinates(e))
+      callback(this.getCoordinates(e));
     });
   },
 
