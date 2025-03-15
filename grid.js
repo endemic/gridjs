@@ -4,7 +4,7 @@ const Grid = {
     this.columns = columns;
 
     // set up 2D array to use as data store for game logic & display
-    this.state = Array(columns).fill().map(_ => Array(rows).fill(''));
+    this._state = Array(columns).fill().map(_ => Array(rows).fill(''));
 
     // set up 2D array to store references to DOM nodes
     this.gridRef = Array(columns).fill().map(_ => Array(rows).fill());
@@ -38,27 +38,27 @@ const Grid = {
     }
   },
 
-  update(nextState) {
+  set state(newState) {
     // enumerate through the current/new state arrays to update the changed values
     for (let x = 0; x < this.columns; x += 1) {
       for (let y = 0; y < this.rows; y += 1) {
         // if old state & new state are the same, nothing needs to be updated
-        if (this.state[x][y] === nextState[x][y]) {
+        if (this._state[x][y] === newState[x][y]) {
             continue;
         }
 
         // otherwise, update the CSS class of the grid cell
-        this.gridRef[x][y].classList = nextState[x][y];
+        this.gridRef[x][y].classList = newState[x][y];
       }
     }
 
     // set the new current state
-    this.state = nextState;
+    this._state = newState;
   },
 
   // Returns a deep copy of the current state
-  get currentState() {
-    return JSON.parse(JSON.stringify(this.state));
+  get state() {
+    return JSON.parse(JSON.stringify(this._state));
   },
 
   // Get a random point in the grid
@@ -71,9 +71,9 @@ const Grid = {
 
   // Fill the grid with supplied value (good for initialization)
   fill(value) {
-    const nextState = this.currentState;
-    nextState.map(row => row.fill(value));
-    this.update(nextState)
+    const newState = Grid.state;
+    newState.map(row => row.fill(value));
+    Grid.state = newState;
   },
 
   // get 4-way/8-way neighbors
@@ -94,12 +94,12 @@ const Grid = {
       ]);
     }
 
-    return cells.filter(this.withinBounds.bind(this));
+    return cells.filter(Grid.withinBounds);
   },
 
   // Determine if point is in grid
   withinBounds({ x, y }) {
-    return x >= 0 && x < this.columns && y >= 0 && y < this.rows;
+    return x >= 0 && x < Grid.columns && y >= 0 && y < Grid.rows;
   },
 
   // Get (x,y) coords of a clicked/tapped square
@@ -139,7 +139,7 @@ const Grid = {
     });
   },
 
-  onPointEnd(callback) {
+  onPointUp(callback) {
     this.grid.addEventListener('mouseup', e => {
       e.preventDefault();
       callback(this.getCoordinates(e));
