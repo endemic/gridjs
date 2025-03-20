@@ -69,9 +69,9 @@ const Grid = {
 
   // Fill the grid with supplied value (good for initialization)
   fill(value) {
-    const newState = Grid.state;
+    const newState = this.state;
     newState.map(row => row.fill(value));
-    Grid.state = newState;
+    this.state = newState;
   },
 
   // get 4-way/8-way neighbors
