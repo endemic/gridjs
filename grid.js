@@ -42,17 +42,15 @@ const Grid = {
     // enumerate through the current/new state arrays to update the changed values
     for (let x = 0; x < this.columns; x += 1) {
       for (let y = 0; y < this.rows; y += 1) {
-        // if old state & new state are the same, nothing needs to be updated
-        if (this._state[x][y] === newState[x][y]) {
-            continue;
+        // if old state & new state are different...
+        if (this._state[x][y] !== newState[x][y]) {
+          // update the DOM to show the change
+          this.gridRef[x][y].classList = newState[x][y];
         }
-
-        // otherwise, update the CSS class of the grid cell
-        this.gridRef[x][y].classList = newState[x][y];
       }
     }
 
-    // set the new current state
+    // set the new state value
     this._state = newState;
   },
 
