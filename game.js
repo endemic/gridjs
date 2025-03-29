@@ -11,13 +11,13 @@ Grid.onPointDown(({ x, y }) => {
   console.debug(`clicked grid cell (${x}, ${y})`);
 
   /* replace this with your own code! */
-  const nextState = Grid.currentState;
+  const newState = Grid.state;
 
-  if (Grid.isEmpty(nextState[x][y])) {
-    nextState[x][y] = 'highlight';
+  if (Grid.isEmpty(newState[x][y])) {
+    newState[x][y] = 'highlight';
   } else {
-    nextState[x][y] = '';
+    newState[x][y] = '';
   }
 
-  Grid.update(nextState);
+  Grid.state = newState;
 });
