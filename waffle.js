@@ -1,4 +1,4 @@
-const Grid = {
+const Waffle = {
   init(rows, columns) {
     this.rows = rows;
     this.columns = columns;
@@ -92,12 +92,12 @@ const Grid = {
       ]);
     }
 
-    return cells.filter(Grid.withinBounds);
+    return cells.filter(Waffle.withinBounds);
   },
 
   // Determine if point is in grid
   withinBounds({ x, y }) {
-    return x >= 0 && x < Grid.columns && y >= 0 && y < Grid.rows;
+    return x >= 0 && x < Waffle.columns && y >= 0 && y < Waffle.rows;
   },
 
   // Get (x,y) coords of a clicked/tapped square
@@ -110,6 +110,10 @@ const Grid = {
   // Determine if a cell/value is considered "empty"
   isEmpty(value) {
     return value === null || value === undefined || (typeof value === 'string' && value.trim() === '');
+  },
+
+  alert(message) {
+    setTimeout(() => alert(message), 1);
   },
 
   // Syntactic sugar for interactive event handlers
@@ -149,27 +153,56 @@ const Grid = {
     });
   },
 
+  shouldPreventDefault({key, shift, control, alt, meta}) {
+    const passthrough = [
+      {key: 'r', shift: false, control: false, alt: false, meta: true},
+      {key: 'r', shift: false, control: true,  alt: false, meta: false},
+      {key: '^', shift: false, control: false, alt: true,  meta: true},
+      {key: 'j', shift: true,  control: false, alt: false, meta: true},
+    ];
+
+    return !passthrough.some(pressed => {
+      return pressed.key === key &&
+             pressed.shift === shift &&
+             pressed.meta === meta &&
+             pressed.control === control &&
+             pressed.alt === alt
+    });
+  },
+
   onKeyDown(callback) {
     window.addEventListener('keydown', e => {
-      e.preventDefault();
-      callback({
+      const keys = {
         key: e.key,
         shift: e.shiftKey,
-        meta: e.metaKey,
-        control: e.ctrlKey
-      });
+        control: e.ctrlKey,
+        alt: e.altKey,
+        meta: e.metaKey
+      };
+
+      if (this.shouldPreventDefault(keys)) {
+        e.preventDefault();
+      }
+
+      callback(keys);
     });
   },
 
   onKeyUp(callback) {
     window.addEventListener('keyup', e => {
-      e.preventDefault();
-      callback({
+      const keys = {
         key: e.key,
         shift: e.shiftKey,
-        meta: e.metaKey,
-        control: e.ctrlKey
-      });
+        control: e.ctrlKey,
+        alt: e.altKey,
+        meta: e.metaKey
+      };
+
+      if (this.shouldPreventDefault(keys)) {
+        e.preventDefault();
+      }
+
+      callback(keys);
     });
   }
 };
