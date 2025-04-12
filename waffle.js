@@ -112,6 +112,10 @@ const Waffle = {
     return value === null || value === undefined || (typeof value === 'string' && value.trim() === '');
   },
 
+  alert(message) {
+    setTimeout(() => alert(message), 1);
+  },
+
   // Syntactic sugar for interactive event handlers
   onPointDown(callback) {
     this.grid.addEventListener('mousedown', e => {
