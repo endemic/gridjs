@@ -153,13 +153,21 @@ const Waffle = {
     });
   },
 
-  shouldPreventDefault({key, shift, meta, control}) {
+  shouldPreventDefault({key, shift, control, alt, meta}) {
     const passthrough = [
-      {key: 'r', shift: false, meta: true, control: false},
-      {key: 'r', shift: false, meta: false, control: true}
+      {key: 'r', shift: false, control: false, alt: false, meta: true},
+      {key: 'r', shift: false, control: true,  alt: false, meta: false},
+      {key: '^', shift: false, control: false, alt: true,  meta: true},
+      {key: 'j', shift: true,  control: false, alt: false, meta: true},
     ];
 
-    return !passthrough.some(pressed => pressed.key === key && pressed.shift === shift && pressed.meta === meta && pressed.control === control);
+    return !passthrough.some(pressed => {
+      return pressed.key === key &&
+             pressed.shift === shift &&
+             pressed.meta === meta &&
+             pressed.control === control &&
+             pressed.alt === alt
+    });
   },
 
   onKeyDown(callback) {
@@ -167,8 +175,9 @@ const Waffle = {
       const keys = {
         key: e.key,
         shift: e.shiftKey,
-        meta: e.metaKey,
-        control: e.ctrlKey
+        control: e.ctrlKey,
+        alt: e.altKey,
+        meta: e.metaKey
       };
 
       if (this.shouldPreventDefault(keys)) {
@@ -184,8 +193,9 @@ const Waffle = {
       const keys = {
         key: e.key,
         shift: e.shiftKey,
-        meta: e.metaKey,
-        control: e.ctrlKey
+        control: e.ctrlKey,
+        alt: e.altKey,
+        meta: e.metaKey
       };
 
       if (this.shouldPreventDefault(keys)) {
