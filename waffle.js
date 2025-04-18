@@ -19,6 +19,7 @@ const Waffle = {
     this.grid.style.aspectRatio = columns / rows;
 
     // fill the grid with `<div>` elements
+    // note the inverted x/y loop
     for (let y = 0; y < this.rows; y += 1) {
       for (let x = 0; x < this.columns; x += 1) {
         // create a DOM node for each element in the backing array
@@ -127,7 +128,9 @@ const Waffle = {
   },
 
   alert(message) {
-    setTimeout(() => alert(message), 1);
+    const dialog = document.querySelector('dialog');
+    dialog.firstElementChild.textContent = message;
+    dialog.showModal();
   },
 
   // Syntactic sugar for interactive event handlers

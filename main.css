@@ -12,6 +12,11 @@ body {
   justify-content: center;
 }
 
+/* background for `dialog` element */
+::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
 #grid {
   border: 1px solid black;
   border-bottom: 0;
