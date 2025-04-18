@@ -7,17 +7,17 @@ Waffle.onKeyDown(({ key }) => {
   console.log(`pressed ${key}`);
 });
 
-Waffle.onPointDown(({ x, y }) => {
-  console.debug(`clicked cell (${x}, ${y})`);
+Waffle.onPointDown(({ x, y }, { primary, secondary }) => {
+  console.log(`${secondary ? 'right' : 'left'}-clicked cell (${x}, ${y})`);
 
   /* replace this with your own code! */
-  const newState = Waffle.state;
+  const state = Waffle.state;
 
-  if (Waffle.isEmpty(newState[x][y])) {
-    newState[x][y] = 'highlight';
+  if (Waffle.isEmpty(state[x][y])) {
+    state[x][y] = 'highlight';
   } else {
-    newState[x][y] = '';
+    state[x][y] = '';
   }
 
-  Waffle.state = newState;
+  Waffle.state = state;
 });

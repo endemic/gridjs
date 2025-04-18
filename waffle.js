@@ -36,6 +36,9 @@ const Waffle = {
         this.grid.appendChild(node);
       }
     }
+
+    // disable context menu (right click) on the grid itself
+    this.grid.addEventListener('contextmenu', e => e.preventDefault());
   },
 
   set state(newState) {
@@ -107,6 +110,17 @@ const Waffle = {
     return {x, y};
   },
 
+  // get list of pressed mouse buttons
+  // stolen from https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons#javascript
+  getButtons(event) {
+    const buttons = ['primary', 'secondary', 'wheel', 'back', 'forward'];
+    const pressed = (e, button) => Boolean(e.buttons & (1 << buttons.indexOf(button)));
+    return buttons.reduce((obj, button) => {
+      obj[button] = pressed(event, button);
+      return obj;
+    }, {});
+  },
+
   // Determine if a cell/value is considered "empty"
   isEmpty(value) {
     return value === null || value === undefined || (typeof value === 'string' && value.trim() === '');
@@ -120,36 +134,36 @@ const Waffle = {
   onPointDown(callback) {
     this.grid.addEventListener('mousedown', e => {
       e.preventDefault();
-      callback(this.getCoordinates(e));
+      callback(this.getCoordinates(e), this.getButtons(e));
     });
 
     this.grid.addEventListener('touchstart', e => {
       e.preventDefault();
-      callback(this.getCoordinates(e));
+      callback(this.getCoordinates(e), this.getButtons(e));
     });
   },
 
   onPointMove(callback) {
     this.grid.addEventListener('mousemove', e => {
       e.preventDefault();
-      callback(this.getCoordinates(e));
+      callback(this.getCoordinates(e), this.getButtons(e));
     });
 
     this.grid.addEventListener('touchmove', e => {
       e.preventDefault();
-      callback(this.getCoordinates(e));
+      callback(this.getCoordinates(e), this.getButtons(e));
     });
   },
 
   onPointUp(callback) {
     this.grid.addEventListener('mouseup', e => {
       e.preventDefault();
-      callback(this.getCoordinates(e));
+      callback(this.getCoordinates(e), this.getButtons(e));
     });
 
     this.grid.addEventListener('touchend', e => {
       e.preventDefault();
-      callback(this.getCoordinates(e));
+      callback(this.getCoordinates(e), this.getButtons(e));
     });
   },
 
